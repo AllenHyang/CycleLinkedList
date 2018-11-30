@@ -1,6 +1,7 @@
 package com.hanyangtech.pathSegTreat;
 
 import com.hanyangtech.CycleLinkedList;
+import com.hanyangtech.Node;
 import com.hanyangtech.pathPreTreat.Point;
 
 
@@ -17,7 +18,7 @@ public class PathSegHandler {
         PositionList one=new PositionList();
         PositionList two=new PositionList();
         PositionList origin=pathSeg.getPoints();
-        CycleLinkedList<Point>.Node<Point> curNode=origin.getNode(0);
+        Node<Point> curNode=origin.getNode(0);
 
         do{
             one.add(curNode.getValue());

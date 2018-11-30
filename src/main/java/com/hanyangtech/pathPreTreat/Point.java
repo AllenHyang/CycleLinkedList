@@ -3,7 +3,15 @@ package com.hanyangtech.pathPreTreat;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class Point  {
+public class Point implements Cloneable {
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
     public double x;
     public double y;
 
@@ -34,4 +42,22 @@ public class Point  {
         }
         return false;
     }
+
+    @Override
+    public Point clone()  {
+        Point point=null;
+        try {
+            point= (Point) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return point;
+    }
+
+    @Override
+    public int hashCode(){
+
+        return intX()+intY();
+    }
+
 }

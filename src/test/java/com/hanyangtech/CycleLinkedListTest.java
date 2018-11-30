@@ -34,15 +34,11 @@ public class CycleLinkedListTest {
         cycleLinkedList.add(1);
         cycleLinkedList.add(5);
         cycleLinkedList.add(566);
-        cycleLinkedList.add(566);
+        cycleLinkedList.add(5669);
 
-        CycleLinkedList.Node first=cycleLinkedList.getFirstNode();
-        Assert.assertEquals(first.getValue(),1);
-        CycleLinkedList.Node curNode=cycleLinkedList.getNode(1);
-        cycleLinkedList.moveHeader(curNode);
-        CycleLinkedList.Node firstTwo=cycleLinkedList.getFirstNode();
-        Assert.assertEquals(firstTwo.getValue(),5);
 
+        cycleLinkedList.moveHeader(3);
+        System.out.println(cycleLinkedList);
     }
 
     @Test

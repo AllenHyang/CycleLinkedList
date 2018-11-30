@@ -4,38 +4,41 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CycleLinkedList<E>  extends AbstractSequentialList<E> {
-
-
-
-    public  class Node<E> {
-        private E value;
-        private Node<E> nextNode;
-        private Node<E> previousNode;
-
-        Node(E value, Node<E> nextNode, Node<E> previousNode) {
-            this.value = value;
-            this.nextNode = nextNode;
-            this.previousNode = previousNode;
-        }
-        public E getValue() {
-            return value;
-        }
-        public Node<E> getNext(){return nextNode;}
-        public Node<E> getPrevious(){return previousNode;}
-        public void setNextNode(Node<E> nextNode) {
-            this.nextNode = nextNode;
-        }
-        public void setPreviousNode(Node<E> previousNode) {
-            this.previousNode = previousNode;
-        }
+public class CycleLinkedList<E>  extends AbstractSequentialList<E> implements Cloneable {
+    public void setHeader(Node<E> node){
+        this.header=node;
     }
+    public Node<E> getHeader(){
+        return header;
+    }
+    public ArrayList<Node> getAllNodes(){
+        ArrayList<Node> nodes=new ArrayList<>();
+        Node<E> curNode=this.header;
+        for(int i=0;i<size;i++){
+            nodes.add(curNode.getNext());
+            curNode=curNode.getNext();
+        }
+        return nodes;
+    }
+
+
     private int size=0;
     private Node<E> header = new Node(null, null, null);
 
     public CycleLinkedList(){
         header.nextNode = header.previousNode =header;
     }
+
+    @Override
+    protected CycleLinkedList<E> clone()  {
+        CycleLinkedList<E> cycleLinkedList=new CycleLinkedList<>();
+        Iterator it=this.iterator();
+        while (it.hasNext()){
+            cycleLinkedList.add((E) it.next());
+        }
+        return cycleLinkedList;
+    }
+
     public Node<E> getLastNode(){
         return header.getPrevious();
     }
@@ -70,10 +73,22 @@ public class CycleLinkedList<E>  extends AbstractSequentialList<E> {
         return header.getNext();
     }
 
+    public void moveHeader(int index){
+        Node<E> node=this.getNode(index);
+        moveHeader(node);
+    }
     public void moveHeader(Node<E> node){
-        Node newHeader=addbefore(null,node);
+        Node<E> newHeader=new Node(null,null,null);
+        //addbefore(newHeader.getValue(),node);
+        Node<E> preNode=node.getPrevious();
+        newHeader.setNextNode(node);
+        newHeader.setPreviousNode(preNode);
+        preNode.setNextNode(newHeader);
+        node.setPreviousNode(newHeader);
+
         header.getPrevious().setNextNode(header.getNext());
         header.getNext().setPreviousNode(header.getPrevious());
+
         header=newHeader;
     }
 
@@ -83,11 +98,15 @@ public class CycleLinkedList<E>  extends AbstractSequentialList<E> {
         return true;
     }
 
-    public  Node addbefore(E e, Node<E> node){
+    private   Node addbefore(E e, Node<E> node){
         Node<E> newNode =new Node<>(e, node, node.previousNode);
         node.previousNode.nextNode = newNode;
         node.previousNode = newNode;
         return newNode;
+    }
+
+    public void increaseSize(){
+        size++;
     }
 
     public E get(int index) {
